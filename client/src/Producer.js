@@ -5,7 +5,10 @@ class ProducerBacklogBubble extends React.Component {
 		super();
 		this.state = { };
 	}
-
+	handleCircleClick(pId){
+		console.log('Circle!')
+		console.log(pId)
+	}
 	render() {
 		//TODO:  **CSS STYLING!**
 		const badColor = 'red'
@@ -26,7 +29,8 @@ class ProducerBacklogBubble extends React.Component {
 				cy={this.props.yPos} 
 				fill={fillColor}
 				stroke="black"
-				r={r} />
+				r={r} 
+				onClick={() => this.props.handleSimClick({type: 'Producer', id: this.props.producerId})}/>
 			<text 
 				x={this.props.xPos} 
 				y={this.props.yPos}
@@ -46,6 +50,7 @@ class Producer extends React.Component {
 		this.state = { };
 	}
 
+
 	render() {
 		let pId = this.props.p.producerId
 
@@ -64,10 +69,13 @@ class Producer extends React.Component {
 			bubbleSize={this.props.svgLayout.bubbleSize} //Its a lie, but it's close enough
 			producerId={pId}
 			backlog={this.props.p.backlog}
+			handleSimClick={(p)=>{this.props.handleSimClick(p)}}
 		/>
 
 		return(
-			<g class="g-producer" id={"producer-" + pId}>
+			
+			<g class="g-producer" id={"producer-" + pId} >
+			<div>{pId}</div>
 				{bComp}
 			</g>
 		);

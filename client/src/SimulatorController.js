@@ -1,8 +1,11 @@
 import React from 'react';
 
+import './SimulatorController.css'
+
 class SimulatorController extends React.Component {
 	constructor(props) {
 		super();
+		this.state = { }
 	}
 
 
@@ -30,12 +33,20 @@ class SimulatorController extends React.Component {
 						<button class="playback" onClick = {() => this.props.simControl('init')}>init</button>}
 					<br/>(tick: {this.props.state.tickNumber}/{this.props.state.maxTicks}) 
 				<div className="k-sim-settings">
+					<label class="switch">
+  						<input type="checkbox"/>
+  						<span class="slider" onChange = {(e) => this.setState({clickToDestroy: !this.state.clickToDestroy})}></span>
+					</label>
 					<h2>Producer {' '}
 						<button onClick={() => this.props.simMutate([{actionType: 'create', simType: 'producer'}])}>+</button>
 					</h2>
 					<ul>{producerPropList}</ul>
 					<h2>Partition {' '}
+
+						{(this.props.state.partitions.length < 19) ? 
 						<button onClick={() => this.props.simMutate([{actionType: 'create', simType: 'partition'}])}>+</button>
+						: <button disabled>+</button>
+					}
 					</h2>
 					<ul>{partitionPropList}</ul>
 					<h2>Consumer {' '}

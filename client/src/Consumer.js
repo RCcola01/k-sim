@@ -26,7 +26,8 @@ class ConsumerLagBubble extends React.Component {
 				cy={this.props.yPos} 
 				fill={fillColor}
 				stroke="black"
-				r={r} />
+				r={r} 
+				onClick={() => this.props.handleSimClick({type: 'Consumer', id: this.props.consumerId})} />
 			<text 
 				x={this.props.xPos} 
 				y={this.props.yPos}
@@ -85,6 +86,7 @@ class Consumer extends React.Component {
 			bubbleSize={this.props.svgLayout.bubbleSize} //Its a lie, but it's close enough
 			consumerId={this.props.c.consumerId}
 			lag={totalLag}
+			handleSimClick={(p)=>{this.props.handleSimClick(p)}}
 		/>
 
 

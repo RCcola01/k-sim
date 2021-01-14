@@ -11,6 +11,8 @@ class Partition extends React.Component {
 		//
 		// const labelLength = this.props.aR.width * 7 / 8 //Math.max(this.props.aR.height / 2, 50)
 		// textLength={labelLength}
+
+		// onClick={() => this.props.simMutate([{actionType: 'remove', simType: 'producer',  details: { id: this.props.producerId }}])
 		return(
 			<React.Fragment>
 				<rect 
@@ -20,6 +22,7 @@ class Partition extends React.Component {
 					height={this.props.aR.height}
 					fill='steelblue'
 					stroke='black'
+					onClick={() => this.props.handleSimClick({type: 'Partition', id: this.props.a.partitionId})}
 				/>
 				<text 
 					textAnchor="end" 

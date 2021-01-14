@@ -8,6 +8,7 @@ import Consumer from './Consumer.js';
 import SimulatorController from './SimulatorController.js';
 
 import './Simulator.css'
+import SimulatorInformation from './SimulatorInformation.js';
 
 class Simulator extends React.Component {
 	constructor(props) {
@@ -388,20 +389,23 @@ class Simulator extends React.Component {
 							break;
 						case 'partition':
 							let aId = this.state.partitions.length
-							let newPartitionData = {
-								partitions: this.state.partitions.concat([this.makePartition(aId)])
-							}
-							let newConsumerData = {
-								consumers: this.consumerGroupRebalance(
-									'round-robin', 
-									newPartitionData.partitions,
-									this.state.consumers)
-							}
-							this.setState({
-								...this.state,
-								...newPartitionData,
-								...newConsumerData
-							})
+							if(aId < 19){
+								let newPartitionData = {
+									partitions: this.state.partitions.concat([this.makePartition(aId)])
+								}
+							
+								let newConsumerData = {
+									consumers: this.consumerGroupRebalance(
+										'round-robin', 
+										newPartitionData.partitions,
+										this.state.consumers)
+								}
+								this.setState({
+									...this.state,
+									...newPartitionData,
+									...newConsumerData
+								})
+						}
 							break;
 						case 'consumer':
 								let cId = this.state.consumers.length
@@ -422,13 +426,46 @@ class Simulator extends React.Component {
 					}
 					break;
 				case 'remove':
-					break;
+					case 'producer':
+							console.log('removing producer');
+							console.log('Producer ID', action['details'])
+							let pId = action['details'].id
+							console.log('Clicked Producer', pId)
+							// let removeProducerIndex = this.state.producers.map(function(producer) { return producer.partitionId; }).indexOf(pId);
+							// this.state.producers.splice(removeProducerIndex, 1);
+
+							// let newProducerData = {
+							// 	producers: this.state.producers.splice(removeProducerIndex, 1)
+							// } 
+							// this.setState({
+							// 	...this.state,
+							// 	...newProducerData
+							// })
+							// console.log(this.state.producers)
+
+							break;
 				case 'update':
 					break;
 				default:
 					console.log('Invalid Sim Mutate Action Type')			
 			}
 		}
+	}
+
+	handleSimClick(obj){
+		console.log('handleSimClick Clicked: ')
+		console.log(obj)
+		let showInfo = !this.state.settings.showInfo
+		console.log(`showInfo ${showInfo}`)
+		// this.setState((state) => {
+		// 	return {settings:{showInfo: showInfo}};
+		//   })
+		// this.setState({
+		// 	...this.state.settings.showInfo,
+		// 	...{showInfo: showInfo},
+		// })
+		this.setState({ settings: { ...this.state.settings, showInfo: showInfo} })
+		console.log(`State showInfo ${this.state.settings.showInfo}`)
 	}
 
 	render() {
@@ -465,7 +502,7 @@ class Simulator extends React.Component {
 			}
 			partitionRectangles.push(aR)
 
-			aComps.push(<Partition a={a} aR={aR} key={"Partition-"+a.partitionId}  />)
+			aComps.push(<Partition a={a} aR={aR} key={"Partition-"+a.partitionId} handleSimClick={(p)=>{this.handleSimClick(p)}} />)
 
 			rectX += partitionSvgLayout.rectMargin + partitionSvgLayout.rectWidth
 		}
@@ -483,7 +520,7 @@ class Simulator extends React.Component {
 		}
 		for (const p of this.state.producers.values()) {
 			totalBacklog = totalBacklog + p.backlog
-			pComps.push(<Producer p={p} svgLayout={producerSvgLayout} key={"Producer-"+p.producerId}/>)
+			pComps.push(<Producer handleSimClick={(p)=>{this.handleSimClick(p)}} p={p} svgLayout={producerSvgLayout} key={"Producer-"+p.producerId} />)
 		}
 
 		const cComps = []
@@ -500,7 +537,7 @@ class Simulator extends React.Component {
 		}
 		for (const c of this.state.consumers.values()) {
 			totalConsumed = totalConsumed + c.totalOffsets
-			cComps.push(<Consumer numConsumers={this.state.consumers.length} svgLayout={consumerSvgLayout} partitions={this.state.partitions} partitionRectangles={partitionRectangles} c={c} key={"Consumer-"+c.consumerId}/>)
+			cComps.push(<Consumer numConsumers={this.state.consumers.length} svgLayout={consumerSvgLayout} partitions={this.state.partitions} partitionRectangles={partitionRectangles} c={c} key={"Consumer-"+c.consumerId} handleSimClick={(p)=>{this.handleSimClick(p)}}/>)
 		}
 
 		return(
@@ -528,6 +565,11 @@ class Simulator extends React.Component {
 						{cComps} 
 					</g>
 				</svg>
+				<div class="k-sim-info">
+					{ this.state.settings.showInfo &&
+						<SimulatorInformation state={this.state}/>
+					}
+				</div>
 			</div>
 		);
 	}
