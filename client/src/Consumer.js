@@ -27,7 +27,7 @@ class ConsumerLagBubble extends React.Component {
 				fill={fillColor}
 				stroke="black"
 				r={r} 
-				onClick={() => this.props.handleSimClick({type: 'Consumer', id: this.props.consumerId})} />
+				onClick={() => this.props.handleSimClick({type: 'consumer', id: this.props.consumerId})} />
 			<text 
 				x={this.props.xPos} 
 				y={this.props.yPos}

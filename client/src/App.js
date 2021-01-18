@@ -21,8 +21,7 @@ class App extends Component {
 					maxTicks: 200,
 					tickMs: 66
 				},
-				showSettings: true,
-				showInfo: false
+				showSettings: true
 			},
 		}
 	}

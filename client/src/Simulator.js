@@ -15,6 +15,7 @@ class Simulator extends React.Component {
 		super();
 		this.state = {
 			settings: props.settings,
+			selectedObj: null,
 			producers: [],
 			partitions: [],
 			consumers: []
@@ -348,7 +349,8 @@ class Simulator extends React.Component {
 			...this.state,
 			...finalState,
 			...generalDefaults,
-			...this.state.settings.general
+			...this.state.settings.general,
+			selectedObj: null
 		});
 		//TODO
 
@@ -356,6 +358,7 @@ class Simulator extends React.Component {
 
 	simControl(command){
 		// TODO: Check that we should issue these commands
+		console.log(`simControl(${command}) begins`, this.state)
 		switch (command) {
 			case 'init':
 				this.initializeSimulator()
@@ -427,22 +430,6 @@ class Simulator extends React.Component {
 					break;
 				case 'remove':
 					case 'producer':
-							console.log('removing producer');
-							console.log('Producer ID', action['details'])
-							let pId = action['details'].id
-							console.log('Clicked Producer', pId)
-							// let removeProducerIndex = this.state.producers.map(function(producer) { return producer.partitionId; }).indexOf(pId);
-							// this.state.producers.splice(removeProducerIndex, 1);
-
-							// let newProducerData = {
-							// 	producers: this.state.producers.splice(removeProducerIndex, 1)
-							// } 
-							// this.setState({
-							// 	...this.state,
-							// 	...newProducerData
-							// })
-							// console.log(this.state.producers)
-
 							break;
 				case 'update':
 					break;
@@ -453,19 +440,10 @@ class Simulator extends React.Component {
 	}
 
 	handleSimClick(obj){
-		console.log('handleSimClick Clicked: ')
-		console.log(obj)
-		let showInfo = !this.state.settings.showInfo
-		console.log(`showInfo ${showInfo}`)
-		// this.setState((state) => {
-		// 	return {settings:{showInfo: showInfo}};
-		//   })
-		// this.setState({
-		// 	...this.state.settings.showInfo,
-		// 	...{showInfo: showInfo},
-		// })
-		this.setState({ settings: { ...this.state.settings, showInfo: showInfo} })
-		console.log(`State showInfo ${this.state.settings.showInfo}`)
+		console.log('handleSimClick', obj)
+		this.setState({ 
+			selectedObj: obj
+			})
 	}
 
 	render() {
@@ -565,11 +543,9 @@ class Simulator extends React.Component {
 						{cComps} 
 					</g>
 				</svg>
-				<div class="k-sim-info">
-					{ this.state.settings.showInfo &&
-						<SimulatorInformation state={this.state}/>
-					}
-				</div>
+
+				<SimulatorInformation simMutate={(p)=>{this.simMutate(p)}} state={this.state} />
+					
 			</div>
 		);
 	}

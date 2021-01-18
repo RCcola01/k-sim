@@ -5,10 +5,7 @@ class ProducerBacklogBubble extends React.Component {
 		super();
 		this.state = { };
 	}
-	handleCircleClick(pId){
-		console.log('Circle!')
-		console.log(pId)
-	}
+
 	render() {
 		//TODO:  **CSS STYLING!**
 		const badColor = 'red'
@@ -30,7 +27,7 @@ class ProducerBacklogBubble extends React.Component {
 				fill={fillColor}
 				stroke="black"
 				r={r} 
-				onClick={() => this.props.handleSimClick({type: 'Producer', id: this.props.producerId})}/>
+				onClick={() => this.props.handleSimClick({type: 'producer', id: this.props.producerId})}/>
 			<text 
 				x={this.props.xPos} 
 				y={this.props.yPos}

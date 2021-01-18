@@ -5,14 +5,20 @@ import React from 'react';
 class SimulatorInformation extends React.Component {
 	constructor(props) {
 		super();
-		this.state = { }
+		// this.state = { }
 	}
 
 
 
 	render() {
 		return(
-			<h1>Showing Info Component</h1>
+            <div class="k-sim-info">
+            { this.props.state.selectedObj &&
+            <h1>{this.props.state.selectedObj.type} {' '}
+                {this.props.state.selectedObj.id}
+            </h1>
+            }
+            </div>
 		);
 	}
 }
